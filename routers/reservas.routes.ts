@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { plainToClass } from "class-transformer";
 import { Connection } from "../middlewares/classes/connection.js";
 import { validateJWT } from "../middlewares/tokenValidation.js";
-import { Propieties } from "../storage/rentals.js";
+import { Bookings } from "../storage/bookings.js";
 import { validate } from "class-validator";
 
 export const reservas = express.Router();
@@ -43,6 +43,37 @@ reservas.get("/", validateJWT, async (req: Request, res: Response) => {
       );
     } catch (error) {
       res.status(500).send("Ha habido un error...");
+    }
+  }
+});
+
+reservas.get("/:DNI", async (req, res) => {
+  if (req.body != false) {
+    try {
+      var data = plainToClass(Bookings, req.params, {
+        excludeExtraneousValues: true,
+      });
+      console.log(data);
+      req.body = data;
+      await validate(data);
+      try {
+        connection.query(
+          `SELECT * 
+          FROM Reserva E
+          JOIN Automovil D ON E.ID_Automovil = D.ID_Automovil
+          JOIN Cliente C ON E.ID_Cliente =C.ID_Cliente WHERE C.DNI = ?`,
+          [data.Id],
+          (err: any, data: any, fils: any) => {
+            console.log(err);
+            console.log(fils);
+            res.send(data);
+          }
+        );
+      } catch (error) {
+        res.status(500).send("Ha habido un error...");
+      }
+    } catch (err) {
+      res.status(500).send(JSON.stringify(err));
     }
   }
 });

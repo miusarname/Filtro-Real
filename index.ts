@@ -27,7 +27,7 @@ app.use("/clientes", clientes);
 app.use("/autos", autos);
 app.use("/token", token);
 app.use("/alquieres", alquieres);
-app.use("/reservas/activas", reservas);
+app.use("/reservas", reservas);
 app.use("/empleados", empleados);
 app.use("/sucursales", sucursales);
 
