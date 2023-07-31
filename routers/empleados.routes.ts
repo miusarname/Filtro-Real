@@ -43,3 +43,20 @@ empleados.get("/", validateJWT, async (req: Request, res: Response) => {
     }
   }
 });
+
+empleados.get("/gerenteoasistente", validateJWT, async (req: Request, res: Response) => {
+  if (req.body != false) {
+    try {
+      connection.query(
+        `SELECT * FROM 	Empleado WHERE Cargo = "Gerente" OR Cargo = "Asistente"`,
+        (err: any, data: any, fils: any) => {
+          console.log(err);
+          console.log(fils);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      res.status(500).send("Ha habido un error...");
+    }
+  }
+});
