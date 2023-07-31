@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
+import { sucursales } from "./routers/sucursales.routes.js";
 import { clientes } from "./routers/clientes.routes.js";
 import { token } from "./routers/token.routes.js";
 import { autos } from "./routers/autos.routes.js";
@@ -28,6 +29,7 @@ app.use("/token", token);
 app.use("/alquieres", alquieres);
 app.use("/reservas/activas", reservas);
 app.use("/empleados", empleados);
+app.use("/sucursales", sucursales);
 
 app.listen(process.env.PORT, () => {
   console.log("listening on port " + process.env.PORT);
