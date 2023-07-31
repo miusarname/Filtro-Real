@@ -5,7 +5,6 @@ import { validate } from "class-validator";
 import { plainToClass } from "class-transformer";
 import { Propieties } from "../storage/rentals.js";
 
-
 export const alquieres = express.Router();
 
 let con: Connection;
@@ -48,7 +47,7 @@ alquieres.get("/", validateJWT, async (req: Request, res: Response) => {
   }
 });
 
-alquieres.get('/:id', async(req, res)=> {
+alquieres.get("/:id", async (req, res) => {
   if (req.body != false) {
     try {
       var data = plainToClass(Propieties, req.params, {
@@ -76,35 +75,65 @@ alquieres.get('/:id', async(req, res)=> {
     } catch (err) {
       res.status(500).send(JSON.stringify(err));
     }
-    
   }
 });
 
-alquieres.get("/costo/:id", validateJWT, async (req: Request, res: Response) => {
-  if (req.body != false) {
-    try {
-      var data = plainToClass(Propieties, req.params, {
-        excludeExtraneousValues: true,
-      });
-      console.log(data);
-      req.body = data;
-      await validate(data);
+alquieres.get(
+  "/costo/:id",
+  validateJWT,
+  async (req: Request, res: Response) => {
+    if (req.body != false) {
       try {
-        connection.query(
-          `SELECT Costo_Total FROM Alquiler WHERE ID_Alquiler = ?`,
-          [data.Id],
-          (err: any, data: any, fils: any) => {
-            console.log(err);
-            console.log(fils);
-            res.send(data);
-          }
-        );
-      } catch (error) {
-        res.status(500).send("Ha habido un error...");
+        var data = plainToClass(Propieties, req.params, {
+          excludeExtraneousValues: true,
+        });
+        console.log(data);
+        req.body = data;
+        await validate(data);
+        try {
+          connection.query(
+            `SELECT Costo_Total FROM Alquiler WHERE ID_Alquiler = ?`,
+            [data.Id],
+            (err: any, data: any, fils: any) => {
+              console.log(err);
+              console.log(fils);
+              res.send(data);
+            }
+          );
+        } catch (error) {
+          res.status(500).send("Ha habido un error...");
+        }
+      } catch (err) {
+        res.status(500).send(JSON.stringify(err));
       }
-    } catch (err) {
-      res.status(500).send(JSON.stringify(err));
     }
-    
   }
-});
+);
+
+alquieres.get(
+  "/details/fechaf",
+  validateJWT,
+  async (req: Request, res: Response) => {
+    if (req.body != false) {
+      try {
+        try {
+          connection.query(
+            `SELECT * 
+          FROM Alquiler E
+          JOIN Automovil D ON E.ID_Automovil = D.ID_Automovil
+          JOIN Cliente C ON E.ID_Cliente =C.ID_Cliente WHERE E.Fecha_Inicio = "2023-07-05"`,
+            (err: any, data: any, fils: any) => {
+              console.log(err);
+              console.log(fils);
+              res.send(data);
+            }
+          );
+        } catch (error) {
+          res.status(500).send("Ha habido un error...");
+        }
+      } catch (err) {
+        res.status(500).send(JSON.stringify(err));
+      }
+    }
+  }
+);
