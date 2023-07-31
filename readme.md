@@ -1,27 +1,12 @@
 # HAE de Contabilidad Empresarial
 
-![Imagen de Portada](./img/Logo%20animado%20tecnología%20digital%20tipográfico%20verde%20neón.gif)
 
 ![Badge en Desarollo](https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green)<img src="https://img.shields.io/circleci/project/github/badges/shields/master" alt="build status">
 
-<center >
+
 
 <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" /><img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white" /><img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" /><img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" /><img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
 
-
-</
-center >
-
-
-La HAE de Contabilidad Empresarial es una aplicación administrativa diseñada para ayudar a las empresas a gestionar sus registros contables, seguimiento de transacciones y generar informes financieros. Esta API proporciona funcionalidades para crear y administrar cuentas contables, registrar transacciones y generar balances.
-
-## Objetivo
-
-El objetivo principal de este proyecto es ofrecer a las empresas una herramienta eficiente y fácil de usar para llevar el control contable de sus operaciones. Al utilizar esta "herramienta", los usuarios podrán realizar tareas como:
-
-- Crear y gestionar cuentas contables.
-- Registrar transacciones financieras, especificando las cuentas involucradas y los montos correspondientes.
-- Generar informes y balances para evaluar la salud financiera de la empresa.
 
 ## Estado del Proyecto
 
@@ -34,36 +19,6 @@ El proyecto de Express incluye las siguientes características:
 - Crear y gestionar cuentas contables.
 - Registrar transacciones financieras, especificando las cuentas involucradas y los montos correspondientes.
 - Generar informes y balances para evaluar la salud financiera de la empresa.
-
-## Próximos 6 días
-
-Durante los próximos 6 días, se trabajarán en las siguientes tareas para mejorar y expandir la funcionalidad de la API:
-
-1. **Día 1**: Implementar endpoints para crear, actualizar y eliminar cuentas contables.
-2. **Día 2**: Desarrollar funcionalidades para registrar transacciones financieras y asociarlas con las cuentas correspondientes.
-3. **Día 3**: Implementar un endpoint para generar el balance general de la empresa en una fecha específica.
-4. **Día 4**: Añadir validaciones y manejo de errores a los endpoints existentes para garantizar la integridad de los datos.
-5. **Día 5**: Mejorar la seguridad de la API mediante la implementación de autenticación y autorización.
-6. **Día 6**: Realizar pruebas exhaustivas y corregir posibles errores o mejoras sugeridas.
-7. **Día 7**: Implementar funcionalidades para generar informes detallados de transacciones por categoría y período de tiempo.
-
-   - Tarea 1: Agregar nuevos endpoints que permitan filtrar transacciones por categoría y período de tiempo especificado.
-   - Tarea 2: Desarrollar consultas SQL para obtener la información necesaria para generar los informes solicitados.
-
-8. **Día 8**: Optimizar el rendimiento de la API y realizar ajustes para mejorar la escalabilidad del sistema.
-
-   - Tarea 1: Revisar el código y buscar posibles puntos de optimización, como consultas SQL redundantes o ineficientes.
-
-9. **Día 9**: Agregar funcionalidad para registrar nuevos bienes económicos en la base de datos.
-
-   - Tarea 1: Crear endpoints que permitan la creación, actualización y eliminación de bienes económicos.
-   - Tarea 2: Desarrollar consultas SQL para insertar, actualizar y eliminar registros en la tabla de "bienes_economicos".
-
-Ten en cuenta que estos objetivos son flexibles y podrían estar sujetos a cambios o ajustes según las necesidades del proyecto.
-
-## Estructura de DB
-
-![Forma 2 de mostrar el diseño de Base de Datos](./img/base_de_Datos.png)
 
 ## Documentacion para (casi) no desarrolladores
 
@@ -96,13 +51,13 @@ Para instalar el proyecto, sigue estos pasos:
 1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/miusarname/apifiltro.git
+git clone https://github.com/miusarname/Filtro-Real.git
 ```
 
 2. Dirígete al directorio del proyecto:
 
 ```bash
-cd apifiltro
+cd Filtro-Real
 ```
 
 3. Instala las dependencias:
@@ -159,8 +114,8 @@ Reemplaza los valores entre comillas con los correspondientes a tu base de datos
 En mi caso quedo algo así :
 
 ```bash
-PORT = 3005
-DB_NAME="contabilidad5"
+PORT = 3002
+DB_NAME="db_campus_alquiler"
 DB_USER="campus"
 DB_PASSWORD="campus2023"
 DB_HOST="localhost"
@@ -185,7 +140,7 @@ npm run dev
 
 La aplicación se ejecutará en el puerto especificado en el archivo .env, por ejemplo, en este caso en el puerto 3000. Puedes acceder a ella en la siguiente URL:
 
-http://localhost:3000/
+http://localhost:<PORT>/
 
 ## El proyecto incluye las siguientes consultas:
 
