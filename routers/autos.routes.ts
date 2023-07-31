@@ -44,3 +44,20 @@ autos.get("/", validateJWT, async (req: Request, res: Response) => {
     }
   }
 });
+
+autos.get("/elderly/5", validateJWT, async (req: Request, res: Response) => {
+  if (req.body != false) {
+    try {
+      connection.query(
+        `SELECT * FROM 	Automovil WHERE Capacidad > 5`,
+        (err: any, data: any, fils: any) => {
+          console.log(err);
+          console.log(fils);
+          res.send(data);
+        }
+      );
+    } catch (error) {
+      res.status(500).send("Ha habido un error...");
+    }
+  }
+});
