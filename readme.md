@@ -1,12 +1,8 @@
 # HAE de Contabilidad Empresarial
 
-
 ![Badge en Desarollo](https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green)<img src="https://img.shields.io/circleci/project/github/badges/shields/master" alt="build status">
 
-
-
 <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" /><img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white" /><img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white" /><img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" /><img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" />
-
 
 ## Estado del Proyecto
 
@@ -19,14 +15,6 @@ El proyecto de Express incluye las siguientes características:
 - Crear y gestionar cuentas contables.
 - Registrar transacciones financieras, especificando las cuentas involucradas y los montos correspondientes.
 - Generar informes y balances para evaluar la salud financiera de la empresa.
-
-## Documentacion para (casi) no desarrolladores
-
-**Nota**:Existe una guia mucho más simple y explicita sobre como hacer uso de este proyecto,y donde especifico unas configuraciones importantes te dejo el link aca abajito (recomiendo que lo leas)
-
-Dar click en la imagen...
-
-<a href="https://github.com/miusarname/apifiltro/blob/main/docs/guideToUse.md"> <img src="https://1000logos.net/wp-content/uploads/2023/01/Google-Docs-logo.png"> </a>
 
 ## Requisitos previos
 
@@ -129,32 +117,31 @@ Antes de usar el proyecto, asegúrate de que la base de datos esté configurada 
 
 1. Copia el código SQL que se encuentra en el archivo db/db_Creation.sql.
 
- ![Copia de codigo sql](./img/Copia%20de%20codigo%20sql.png)
-
+![Copia de codigo sql](./img/Copia%20de%20codigo%20sql.png)
 
 2. Abre tu administrador de base de datos, como MySQL Workbench o PhpMyAdmin
 
- **En MySQLWorkbench**
- ![Seleccion de conexion](./img/Seleccion%20de%20conexion%20en%20MySQLWorkBench.png)
+**En MySQLWorkbench**
+![Seleccion de conexion](./img/Seleccion%20de%20conexion%20en%20MySQLWorkBench.png)
 
-  **En phpMyAdmin**
-  ![Seleccion de conexion en phpMyAdmin](./img/Abriendo%20phpmyadmin.png)
+**En phpMyAdmin**
+![Seleccion de conexion en phpMyAdmin](./img/Abriendo%20phpmyadmin.png)
 
 3. Pega el codigo
 
- **En MySQLWorkbench**
- ![Pegar el codigo en en MySQLWorkbench](./img/Pegar%20codigo%20sql.png)
+**En MySQLWorkbench**
+![Pegar el codigo en en MySQLWorkbench](./img/Pegar%20codigo%20sql.png)
 
- **En phpMyAdmin**
-  ![Pegar el codigo en phpMyAdmin](./img/pegar%20codigo%20en%20phpMyAdmin.png)
+**En phpMyAdmin**
+![Pegar el codigo en phpMyAdmin](./img/pegar%20codigo%20en%20phpMyAdmin.png)
 
 4. Ejecuta el código SQL copiado en la interfaz del administrador para crear la base de datos y sus tablas.
 
- **En MySQLWorkbench**
- ![Ejecucion del sql](./img/Ejecucion%20del%20codigo.png)
+**En MySQLWorkbench**
+![Ejecucion del sql](./img/Ejecucion%20del%20codigo.png)
 
 **En phpMyAdmin**
-  ![Ejecucion del sql en phpMyAdmin](./img/ejecutar%20sql%20phpMyAdmin.png)
+![Ejecucion del sql en phpMyAdmin](./img/ejecutar%20sql%20phpMyAdmin.png)
 
 ## Obtener el Token de Acceso
 
@@ -163,11 +150,12 @@ Antes de acceder a las rutas protegidas, necesitas obtener un token de acceso. P
 ```bash
 http://localhost:<PORT>/token
 ```
- ![Solicitud del token](./img/Acceso%20a%20token.png)
+
+![Solicitud del token](./img/Acceso%20a%20token.png)
 
 **Nota**:Tambien existe un token de administrador que lo podemos pedir de la misma forma :
 
- ![Solicitud token Admon](./img/solictud%20token%20admon.png)
+![Solicitud token Admon](./img/solictud%20token%20admon.png)
 
 ## Acceso a las Rutas
 
@@ -175,20 +163,19 @@ Una vez que tengas el token de acceso, debes incluirlo en los headers de tus pet
 
 ```javascript
 headers: {
-  Authorization: "Bearer tu_token_de_acceso"
+  Authorization: "Bearer tu_token_de_acceso";
 }
 ```
 
 o
 
- ![Se pega el token en los headers](./img/se%20pega%20el%20token.png)
+![Se pega el token en los headers](./img/se%20pega%20el%20token.png)
 
- Ahora puedes acceder a las rutas especificadas en el token. Si el token tiene el rol de "administrador", tendrás acceso total.
+Ahora puedes acceder a las rutas especificadas en el token. Si el token tiene el rol de "administrador", tendrás acceso total.
 
-  ![Accediendo a las rutas](./img/Accediendo%20a%20las%20rutas.png)
+![Accediendo a las rutas](./img/Accediendo%20a%20las%20rutas.png)
 
 **NOTA**: Los token tiene una duracion de 30 minutos
-
 
 ## Ejecución
 
@@ -199,6 +186,7 @@ Para ejecutar la aplicación, simplemente ejecuta el siguiente comando:
 ```bash
 npm run tsc
 ```
+
 luego esto :
 
 ```bash
@@ -211,233 +199,63 @@ http://localhost:<PORT>/
 
 ## El proyecto incluye las siguientes consultas:
 
-### - Consulta 1: Obtiene todos las cuentas. Endpoint: /cuenta (GET)
+### - Consulta 1: Mostrar todos los clientes registrados en la base de datos. Endpoint: /clientes (GET)
 
-#### Explicacion de como enviar
+### - Consulta 2: Obtener todos los automóviles disponibles para alquiler. Endpoint: /autos (GET)
 
-Voy a explicar el json con el siguiente "diagrama":
+### - Consulta 3: Listar todos los alquileres activos junto con los datos de los clientes relacionados. Endpoint: /alquieres (GET)
 
-```json
+### - Consulta 4: Mostrar todas las reservas pendientes con los datos del cliente y el automóvil reservado. Endpoint: /reservas (GET)
 
-{
-    "key":<tipo_de_dato>,
-}
+### - Consulta 5: Obtener los detalles del alquiler con el ID_Alquiler específico. Endpoint: /alquieres/:id (GET)
 
-```
+#### Explicacion:
 
-Los datos a enviar son
-
-```json
-{
-    "nombre":String,
-    "tipo":Number,
-    "id":Number
-}
-```
-
-### - Consulta 2: Crea una nueva cuenta. Endpoint: /cuenta (POST)
-
-#### Explicacion de como enviar
-
-Voy a explicar el json con el siguiente "diagrama":
-
-```json
-
-{
-    "key":<tipo_de_dato>,
-    "key":? <Esto_significa_que_es_opcional>
-}
-
-```
-
-Los datos a enviar son
-
-```json
-{
-    "nombre":String,
-    "tipo":Number,
-    "id":? Number
-}
-```
-
-### - Consulta 3: Actualiza una cuenta con los valores. Endpoint: /cuenta (PUT)
-
-#### Explicacion de como enviar
-
-Voy a explicar el json con el siguiente "diagrama":
-
-```json
-
-{
-    "key":<tipo_de_dato>,
-}
-
-```
-
-Los datos a enviar son
-
-```json
-{
-    "nombre":String,
-    "tipo":Number,
-    "id":Number
-}
-```
-
-### - Consulta 4: Elimina una cuenta teniendo en cuenta el id. Endpoint: /cuenta (DELETE)
-
-#### Explicacion de como enviar
-
-Voy a explicar el json con el siguiente "diagrama":
-
-```json
-
-{
-    "key":<tipo_de_dato>,
-}
-
-```
-
-Los datos a enviar son
-
-```json
-{
-    "nombre":? String,
-    "tipo":? Number,
-    "id":Number
-}
-```
-
-### - Consulta 5: Crea una nueva transacción. Endpoint: /transaccion (POST)
-
-#### Explicacion de como enviar
-
-Voy a explicar el json con el siguiente "diagrama":
-
-```json
-
-{
-    "key":<tipo_de_dato>,
-}
-
-```
-
-Los datos a enviar son
-
-```json
-{
-    "id":Number,
-    "fecha_registro":String(De este tipo de formato " 2023-07-25 "),
-    "monto":Number,
-    "cuenta_destino_id":Number,
-    "cuenta_origen_id":Number
-}
-```
-
-### - Consulta 6: Crea un balance a partir de datos de la base de datos. Endpoint: /balance (GET)
-
-#### Explicacion de como enviar
-
-Voy a explicar el json con el siguiente "diagrama":
-
-```json
-
-{
-    "key":<tipo_de_dato>,
-}
-
-```
-
-Los datos a enviar son
-
-```json
-{
-    "id":Number
-}
-```
-
-### - Consulta 7: Permite filtrar transacciones por categoría y por período de tiempo especificado. Endpoint: /transacciones/timeortype (GET)
-
-#### Explicacion de como enviar
-
-En este caso vale la pena mencionar que está hecho de forma que se envia por el query es decir por aca:
+Esto /:id significa que aca es donde pondras el numero del alquier por ejemplo si el el numero del alquier es 1 entonces buscaremos
 
 ```bash
-/transacciones?Info=a
+http://localhost:<PORT>/alquieres/1
 ```
 
-En este caso se haria con la siguiente estructura :
+### - Consulta 6: Listar los empleados con el cargo de "Vendedor" Endpoint: /empleados (GET)
+
+### - Consulta 7: Mostrar la cantidad total de automóviles disponibles en cada sucursal. Endpoint: /sucursales/cantidad (GET)
+
+### - Consulta 8: Obtener el costo total de un alquiler específico. Endpoint: /alquieres/costo/:id (GET)
+
+#### Explicacion:
+
+Esto /:id significa que aca es donde pondras el numero del alquier por ejemplo si el el numero del alquier es 1 entonces buscaremos
 
 ```bash
-/transacciones/timeortype?categoria=<categoria>&fechaInicio=<fecha_de_inicio>&fechaFin=<fecha_de_fin>
+http://localhost:<PORT>/alquieres/costo/1
 ```
 
-### - Consulta 8: Crea un nuevo bien Economico. Endpoint: /activos/bienesE (POST)
+### - Consulta 9: Listar los clientes con el DNI específico. Endpoint: /clientes/:DNI (GET)
 
-#### Explicación de cómo enviar
+#### Explicacion:
 
-Para crear una nueva transacción, debes enviar una solicitud HTTP POST al endpoint /transaccion con un JSON en el cuerpo de la solicitud que siga la siguiente estructura:
+Esto /:DNI significa que aca es donde pondras el numero del alquier por ejemplo si el el DNI es 1 entonces buscaremos
 
-```json
-{
-    "nombre": "<nombre_del_bien>",
-    "tipo": <tipo_de_dato>
-}
+```bash
+http://localhost:<PORT>/clientes/1
 ```
 
-Donde:
+### - Consulta 10: Mostrar todos los automóviles con una capacidad mayor a 5 personas. Endpoint: /autos/elderly/5 (GET)
 
-- `nombre`: Es el nombre del bien Economico. Por ejemplo, "Propiedad de 1500M".
+### - Consulta 11: Obtener los detalles del alquiler que tiene fecha de inicio en '2023-07-05'. Endpoint: /alquieres/details/fechaf (GET)
 
-- `tipo`: Representa el tipo de bien. Debe ser un string que describa el tipo.
+### - Consulta 12: Listar las reservas pendientes realizadas por un cliente específico. Endpoint: /alquieres/:DNI (GET)
 
-Asegúrate de reemplazar `<tipo_de_dato>` y `<nombre_del_bien>` con los tipos de datos adecuados para cada campo. Por ejemplo, `<tipo_de_dato>` puede ser `string` y `<nombre_del_bien>`.
+#### Explicacion:
 
-### - Consulta 9: Modificar un bien Economico. Endpoint: /activos/bienesE/:id (PUT)
+Esto /:DNI significa que aca es donde pondras el DNI del cliente por ejemplo si el el DNI es 1 entonces buscaremos
 
-#### Explicación de cómo enviar
-
-Para crear una nueva transacción, debes enviar una solicitud HTTP POST al endpoint /transaccion con un JSON en el cuerpo de la solicitud que siga la siguiente estructura:
-
-```json
-{
-    "nombre": "<nombre_del_bien>",
-    "tipo": <tipo_de_dato>
-}
+```bash
+http://localhost:<PORT>/alquieres/1
 ```
 
-Donde:
-
-- `id`: Representa el identificador único del bien. Si este campo se incluye en la solicitud, debe ser un número.
-
-- `nombre`: Es el nombre del bien Economico. Por ejemplo, "Propiedad de 1500M".
-
-- `tipo`: Representa el tipo de bien. Debe ser un string que describa el tipo.
-
-Asegúrate de reemplazar `<tipo_de_dato>` y `<nombre_del_bien>` con los tipos de datos adecuados para cada campo. Por ejemplo, `<tipo_de_dato>` puede ser `string` y `<nombre_del_bien>`.
-
-### - Consulta 10: Elimina un bien Economico. Endpoint: /activos/bienesE/:id (DELETE)
-
-#### Explicación de cómo enviar
-
-Para crear una nueva transacción, debes enviar una solicitud HTTP POST al endpoint /transaccion con un JSON en el cuerpo de la solicitud que siga la siguiente estructura:
-
-```json
-{
-    "nombre": "<nombre_del_bien>",
-    "tipo": <tipo_de_dato>
-}
-```
-
-Donde:
-
-- `id`: Representa el identificador único del bien. Si este campo se incluye en la solicitud, debe ser un número.
-
-- `nombre`: Es el nombre del bien Economico. Por ejemplo, "Propiedad de 1500M".
-
-- `tipo`: Representa el tipo de bien. Debe ser un string que describa el tipo.
-
-Asegúrate de reemplazar `<tipo_de_dato>` y `<nombre_del_bien>` con los tipos de datos adecuados para cada campo. Por ejemplo, `<tipo_de_dato>` puede ser `string` y `<nombre_del_bien>`.
+### - Consulta 11: Mostrar los empleados con cargo de "Gerente" o "Asistente". Endpoint: /empleados/gerenteoasistente (GET)
 
 ## Contribuciones
 
