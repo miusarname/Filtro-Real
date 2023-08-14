@@ -1,25 +1,20 @@
 import express, { Request, Response, NextFunction } from "express";
-import { Connection } from "../middlewares/classes/connection.js";
-import { validateJWT } from "../middlewares/tokenValidation.js";
+import { MongoClient } from "mongodb";
 import { validate } from "class-validator";
 import { plainToClass } from "class-transformer";
 import { Propieties } from "../storage/rentals.js";
+import { validateJWT } from "../middlewares/tokenValidation.js";
+import { con } from "../db/atlas.js";
 
 export const alquieres = express.Router();
 
-let con: Connection;
+let db: any;
 let connection: any;
 
-//connection DB
-alquieres.use((req: Request, res: Response, next: NextFunction) => {
+alquieres.use(async (req: Request, res: Response, next: NextFunction) => {
   try {
-    con = new Connection(
-      process.env.DB_HOST,
-      process.env.DB_NAME,
-      process.env.DB_USER,
-      process.env.DB_PASSWORD
-    );
-    connection = con.connection;
+    connection = await con;
+    db = connection.db(process.env.DB_NAME);
     next();
   } catch (error) {
     res.sendStatus(500);
@@ -28,19 +23,33 @@ alquieres.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 alquieres.get("/", validateJWT, async (req: Request, res: Response) => {
-  if (req.body != false) {
+  if (req.body !== false) {
     try {
-      connection.query(
-        `SELECT * 
-        FROM Alquiler E
-        JOIN Automovil D ON E.ID_Automovil = D.ID_Automovil
-        JOIN Cliente C ON E.ID_Cliente =C.ID_Cliente WHERE E.Estado = "Activo"`,
-        (err: any, data: any, fils: any) => {
-          console.log(err);
-          console.log(fils);
-          res.send(data);
-        }
-      );
+      const alquilerCollection = db.collection("Alquiler");
+      const dataActivo = await alquilerCollection
+        .aggregate([
+          {
+            $match: { Estado: "Activo" },
+          },
+          {
+            $lookup: {
+              from: "Automovil",
+              localField: "ID_Automovil",
+              foreignField: "ID_Automovil",
+              as: "automovilData",
+            },
+          },
+          {
+            $lookup: {
+              from: "Cliente",
+              localField: "ID_Cliente",
+              foreignField: "ID_Cliente",
+              as: "clienteData",
+            },
+          },
+        ])
+        .toArray();
+      res.send(dataActivo);
     } catch (error) {
       res.status(500).send("Ha habido un error...");
     }
@@ -48,30 +57,37 @@ alquieres.get("/", validateJWT, async (req: Request, res: Response) => {
 });
 
 alquieres.get("/:id", async (req, res) => {
-  if (req.body != false) {
+  if (req.body !== false) {
     try {
-      var data = plainToClass(Propieties, req.params, {
+      const propietiesData = plainToClass(Propieties, req.params, {
         excludeExtraneousValues: true,
       });
-      console.log(data);
-      req.body = data;
-      await validate(data);
-      try {
-        connection.query(
-          `SELECT * 
-          FROM Alquiler E
-          JOIN Automovil D ON E.ID_Automovil = D.ID_Automovil
-          JOIN Cliente C ON E.ID_Cliente =C.ID_Cliente WHERE E.Estado = "Activo" AND E.ID_Alquiler = ?`,
-          [data.Id],
-          (err: any, data: any, fils: any) => {
-            console.log(err);
-            console.log(fils);
-            res.send(data);
-          }
-        );
-      } catch (error) {
-        res.status(500).send("Ha habido un error...");
-      }
+      await validate(propietiesData);
+      const alquilerCollection = db.collection("Alquiler");
+      const dataById = await alquilerCollection
+        .aggregate([
+          {
+            $match: { Estado: "Activo", ID_Alquiler: propietiesData.Id },
+          },
+          {
+            $lookup: {
+              from: "Automovil",
+              localField: "ID_Automovil",
+              foreignField: "ID_Automovil",
+              as: "automovilData",
+            },
+          },
+          {
+            $lookup: {
+              from: "Cliente",
+              localField: "ID_Cliente",
+              foreignField: "ID_Cliente",
+              as: "clienteData",
+            },
+          },
+        ])
+        .toArray();
+      res.send(dataById);
     } catch (err) {
       res.status(500).send(JSON.stringify(err));
     }
@@ -82,27 +98,18 @@ alquieres.get(
   "/costo/:id",
   validateJWT,
   async (req: Request, res: Response) => {
-    if (req.body != false) {
+    if (req.body !== false) {
       try {
-        var data = plainToClass(Propieties, req.params, {
+        const propietiesData = plainToClass(Propieties, req.params, {
           excludeExtraneousValues: true,
         });
-        console.log(data);
-        req.body = data;
-        await validate(data);
-        try {
-          connection.query(
-            `SELECT Costo_Total FROM Alquiler WHERE ID_Alquiler = ?`,
-            [data.Id],
-            (err: any, data: any, fils: any) => {
-              console.log(err);
-              console.log(fils);
-              res.send(data);
-            }
-          );
-        } catch (error) {
-          res.status(500).send("Ha habido un error...");
-        }
+        await validate(propietiesData);
+        const alquilerCollection = db.collection("Alquiler");
+        const result = await alquilerCollection.findOne(
+          { ID_Alquiler: propietiesData.Id },
+          { projection: { _id: 0, Costo_Total: 1 } }
+        );
+        res.send(result);
       } catch (err) {
         res.status(500).send(JSON.stringify(err));
       }
@@ -114,23 +121,33 @@ alquieres.get(
   "/details/fechaf",
   validateJWT,
   async (req: Request, res: Response) => {
-    if (req.body != false) {
+    if (req.body !== false) {
       try {
-        try {
-          connection.query(
-            `SELECT * 
-          FROM Alquiler E
-          JOIN Automovil D ON E.ID_Automovil = D.ID_Automovil
-          JOIN Cliente C ON E.ID_Cliente =C.ID_Cliente WHERE E.Fecha_Inicio = "2023-07-05"`,
-            (err: any, data: any, fils: any) => {
-              console.log(err);
-              console.log(fils);
-              res.send(data);
-            }
-          );
-        } catch (error) {
-          res.status(500).send("Ha habido un error...");
-        }
+        const alquilerCollection = db.collection("Alquiler");
+        const dataFecha = await alquilerCollection
+          .aggregate([
+            {
+              $match: { Fecha_Inicio: "2023-07-05" },
+            },
+            {
+              $lookup: {
+                from: "Automovil",
+                localField: "ID_Automovil",
+                foreignField: "ID_Automovil",
+                as: "automovilData",
+              },
+            },
+            {
+              $lookup: {
+                from: "Cliente",
+                localField: "ID_Cliente",
+                foreignField: "ID_Cliente",
+                as: "clienteData",
+              },
+            },
+          ])
+          .toArray();
+        res.send(dataFecha);
       } catch (err) {
         res.status(500).send(JSON.stringify(err));
       }

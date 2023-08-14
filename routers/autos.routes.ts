@@ -1,63 +1,59 @@
-import express, { Request, Response, NextFunction } from "express";
-import { Connection } from "../middlewares/classes/connection.js";
-import { validateJWT } from "../middlewares/tokenValidation.js";
+import express, { Request, Response, NextFunction } from 'express';
+import { MongoClient } from 'mongodb';
+import { validateJWT } from '../middlewares/tokenValidation.js';
+import { con } from '../db/atlas.js';
+
 export const autos = express.Router();
 
-let con: Connection;
-
+let db: any;
 let connection: any;
 
-//connection DB
-
-autos.use((req: Request, res: Response, next: NextFunction) => {
+autos.use(async (req: Request, res: Response, next: NextFunction) => {
   try {
-    con = new Connection(
-      process.env.DB_HOST,
-      process.env.DB_NAME,
-      process.env.DB_USER,
-      process.env.DB_PASSWORD
-    );
-
-    connection = con.connection;
-
+    connection = await con;
+    db = connection.db(process.env.DB_NAME);
     next();
   } catch (error) {
     res.sendStatus(500);
-
     res.send(error);
   }
 });
 
-autos.get("/", validateJWT, async (req: Request, res: Response) => {
-  if (req.body != false) {
+autos.get('/', validateJWT, async (req: Request, res: Response) => {
+  if (req.body !== false) {
     try {
-      connection.query(
-        `SELECT * FROM 	Automovil`,
-        (err: any, data: any, fils: any) => {
-          console.log(err);
-          console.log(fils);
-          res.send(data);
-        }
-      );
+      const automovilCollection = db.collection('Automovil');
+      const data = await automovilCollection.find({}).toArray();
+      res.send(data);
     } catch (error) {
-      res.status(500).send("Ha habido un error...");
+      res.status(500).send('Ha habido un error...');
     }
   }
 });
 
-autos.get("/elderly/5", validateJWT, async (req: Request, res: Response) => {
-  if (req.body != false) {
+autos.get('/elderly/5', validateJWT, async (req: Request, res: Response) => {
+  if (req.body !== false) {
     try {
-      connection.query(
-        `SELECT * FROM 	Automovil WHERE Capacidad > 5`,
-        (err: any, data: any, fils: any) => {
-          console.log(err);
-          console.log(fils);
-          res.send(data);
-        }
-      );
+      const automovilCollection = db.collection('Automovil');
+      const data = await automovilCollection.find({ Capacidad: { $gt: 5 } }).toArray();
+      res.send(data);
     } catch (error) {
-      res.status(500).send("Ha habido un error...");
+      res.status(500).send('Ha habido un error...');
     }
   }
 });
+
+// Rutas adicionales
+autos.get('/details/:id', validateJWT, async (req: Request, res: Response) => {
+  if (req.body !== false) {
+    try {
+      const automovilCollection = db.collection('Automovil');
+      const data = await automovilCollection.findOne({ ID_Automovil: req.params.id });
+      res.send(data);
+    } catch (error) {
+      res.status(500).send('Ha habido un error...');
+    }
+  }
+});
+
+

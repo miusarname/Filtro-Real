@@ -1,25 +1,20 @@
-import express, { Request, Response, NextFunction } from "express";
-import { plainToClass } from "class-transformer";
-import { Connection } from "../middlewares/classes/connection.js";
-import { validateJWT } from "../middlewares/tokenValidation.js";
-import { Bookings } from "../storage/bookings.js";
-import { validate } from "class-validator";
+import express, { Request, Response, NextFunction } from 'express';
+import { MongoClient } from 'mongodb';
+import { plainToClass } from 'class-transformer';
+import { con } from '../db/atlas.js';
+import { validateJWT } from '../middlewares/tokenValidation.js';
+import { Bookings } from '../storage/bookings.js';
+import { validate } from 'class-validator';
 
 export const reservas = express.Router();
 
-let con: Connection;
+let db: any;
 let connection: any;
 
-//connection DB
-reservas.use((req: Request, res: Response, next: NextFunction) => {
+reservas.use(async (req: Request, res: Response, next: NextFunction) => {
   try {
-    con = new Connection(
-      process.env.DB_HOST,
-      process.env.DB_NAME,
-      process.env.DB_USER,
-      process.env.DB_PASSWORD
-    );
-    connection = con.connection;
+    connection = await con;
+    db = connection.db(process.env.DB_NAME);
     next();
   } catch (error) {
     res.sendStatus(500);
@@ -27,51 +22,107 @@ reservas.use((req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-reservas.get("/", validateJWT, async (req: Request, res: Response) => {
-  if (req.body != false) {
+reservas.get('/', validateJWT, async (req: Request, res: Response) => {
+  if (req.body !== false) {
     try {
-      connection.query(
-        `SELECT * 
-        FROM Reserva E
-        JOIN Automovil D ON E.ID_Automovil = D.ID_Automovil
-        JOIN Cliente C ON E.ID_Cliente =C.ID_Cliente WHERE E.Estado = "Pendiente"`,
-        (err: any, data: any, fils: any) => {
-          console.log(err);
-          console.log(fils);
-          res.send(data);
-        }
-      );
+      const reservaCollection = db.collection('Reserva');
+      const dataPendiente = await reservaCollection
+        .aggregate([
+          {
+            $match: { Estado: 'Pendiente' },
+          },
+          {
+            $lookup: {
+              from: 'Automovil',
+              localField: 'ID_Automovil',
+              foreignField: 'ID_Automovil',
+              as: 'automovil',
+            },
+          },
+          {
+            $lookup: {
+              from: 'Cliente',
+              localField: 'ID_Cliente',
+              foreignField: 'ID_Cliente',
+              as: 'cliente',
+            },
+          },
+        ])
+        .toArray();
+      res.send(dataPendiente);
     } catch (error) {
-      res.status(500).send("Ha habido un error...");
+      res.status(500).send('Ha habido un error...');
     }
   }
 });
 
-reservas.get("/:DNI", async (req, res) => {
-  if (req.body != false) {
+reservas.get('/:DNI', async (req, res) => {
+  if (req.body !== false) {
     try {
-      var data = plainToClass(Bookings, req.params, {
+      const bookingData = plainToClass(Bookings, req.params, {
         excludeExtraneousValues: true,
       });
-      console.log(data);
-      req.body = data;
-      await validate(data);
-      try {
-        connection.query(
-          `SELECT * 
-          FROM Reserva E
-          JOIN Automovil D ON E.ID_Automovil = D.ID_Automovil
-          JOIN Cliente C ON E.ID_Cliente =C.ID_Cliente WHERE C.DNI = ?`,
-          [data.Id],
-          (err: any, data: any, fils: any) => {
-            console.log(err);
-            console.log(fils);
-            res.send(data);
-          }
-        );
-      } catch (error) {
-        res.status(500).send("Ha habido un error...");
-      }
+      await validate(bookingData);
+      const reservaCollection = db.collection('Reserva');
+      const dataByDNI = await reservaCollection
+        .aggregate([
+          {
+            $match: { 'cliente.DNI': bookingData.Id },
+          },
+          {
+            $lookup: {
+              from: 'Automovil',
+              localField: 'ID_Automovil',
+              foreignField: 'ID_Automovil',
+              as: 'automovil',
+            },
+          },
+          {
+            $lookup: {
+              from: 'Cliente',
+              localField: 'ID_Cliente',
+              foreignField: 'ID_Cliente',
+              as: 'cliente',
+            },
+          },
+        ])
+        .toArray();
+      res.send(dataByDNI);
+    } catch (err) {
+      res.status(500).send(JSON.stringify(err));
+    }
+  }
+});
+
+// Ruta adicional
+reservas.get('/details/:id', async (req, res) => {
+  if (req.body !== false) {
+    try {
+      const reservaCollection = db.collection('Reserva');
+      const dataDetails = await reservaCollection
+        .aggregate([
+          {
+            $match: { ID_Reserva: req.params.id },
+          },
+          {
+            $lookup: {
+              from: 'Automovil',
+              localField: 'ID_Automovil',
+              foreignField: 'ID_Automovil',
+              as: 'automovil',
+            },
+          },
+          {
+            $lookup: {
+              from: 'Cliente',
+              localField: 'ID_Cliente',
+              foreignField: 'ID_Cliente',
+              as: 'cliente',
+            },
+          },
+        ])
+        .toArray();
+      res.send(dataDetails);
     } catch (err) {
       res.status(500).send(JSON.stringify(err));
     }

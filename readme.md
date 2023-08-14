@@ -90,20 +90,20 @@ Significa que el puerto esta ocupado y debes poner otro
 
 
 DB_NAME="nombre_de_tu_base_de_datos"
-DB_USER="tu_usuario_de_mysql"
+DB_USER="tu_usuario_de_mongodb"
 DB_PASSWORD="contraseña_de_tu_base_de_datos"
 DB_HOST="localhost"
 DB_PORT=3306 o <puerto_de_tu_base_de_datos> (por ejemplo: 3306)
 JWT_PRIVATE_KEY = <La_key_con_la_cual_desencripta_el_JWT> (Este campo es libre, lo quiera poner)
 ````
 
-Reemplaza los valores entre comillas con los correspondientes a tu base de datos MySQL.
+Reemplaza los valores entre comillas con los correspondientes a tu base de datos mongodb.
 
 En mi caso quedo algo así :
 
 ```bash
 PORT = 3002
-DB_NAME="db_campus_alquiler"
+DB_NAME="contabilidad5"
 DB_USER="campus"
 DB_PASSWORD="campus2023"
 DB_HOST="localhost"
@@ -115,11 +115,11 @@ JWT_PRIVATE_KEY = "OscarElPapu"
 
 Antes de usar el proyecto, asegúrate de que la base de datos esté configurada correctamente. Sigue los pasos a continuación:
 
-1. Copia el código SQL que se encuentra en el archivo db/db_Creation.sql.
+1. Copia el código SQL que se encuentra en el archivo db/db_Creation.mongodb.
 
 ![Copia de codigo sql](./img/Copia%20de%20codigo%20sql.png)
 
-2. Abre tu administrador de base de datos, como MySQL Workbench o PhpMyAdmin
+2. Abre tu administrador de base de datos, como mongodb Workbench o PhpMyAdmin
 
 **En MySQLWorkbench**
 ![Seleccion de conexion](./img/Seleccion%20de%20conexion%20en%20MySQLWorkBench.png)

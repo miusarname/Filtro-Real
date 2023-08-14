@@ -21,6 +21,7 @@
     "express-session": "^1.17.3",
     "figlet": "^1.6.0",
     "jose": "^4.14.4",
+    "mongodb": "^5.7.0",
     "mysql2": "^3.5.2",
     "passport": "^0.6.0",
     "passport-discord": "^0.1.4",

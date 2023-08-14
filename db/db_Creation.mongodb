@@ -1,0 +1,124 @@
+use("contabilidad5");
+// Colección cuentas que almacena las diferentes cuentas contables
+db.createCollection("cuentas");
+// Ejemplo de documento en la colección cuentas
+db.cuentas.insertOne({
+  id: 1,
+  nombre: "Cuenta1",
+  tipo: "Tipo1",
+});
+
+// Colección usuarios que almacena los datos de los usuarios
+db.createCollection("usuarios");
+// Ejemplo de documento en la colección usuarios
+db.usuarios.insertOne({
+  id: 1,
+  nombre: "Usuario1",
+});
+
+// Colección para relacionar usuarios con cuentas (colección de asignación)
+db.createCollection("usuarios_cuentas");
+// Ejemplo de documento en la colección usuarios_cuentas
+db.usuarios_cuentas.insertOne({
+  usuario_id: 1,
+  cuenta_id: 1,
+});
+
+// Colección ingresos que registra los ingresos y su cuenta asociada
+db.createCollection("ingresos");
+// Ejemplo de documento en la colección ingresos
+db.ingresos.insertOne({
+  id: 1,
+  cuenta_ingreso_id: 1,
+  concepto: "Ingreso1",
+  monto: 100.0,
+  fecha_registro: ISODate("2023-08-14"),
+});
+
+// Colección egresos que registra los egresos y su cuenta asociada
+db.createCollection("egresos");
+// Ejemplo de documento en la colección egresos
+db.egresos.insertOne({
+  id: 1,
+  cuenta_egreso_id: 1,
+  concepto: "Egreso1",
+  monto: 50.0,
+  fecha_registro: ISODate("2023-08-14"),
+});
+
+// Resto de las colecciones...
+
+// Colección devengado que registra el devengado y su cuenta asociada
+db.createCollection("devengado");
+// Ejemplo de documento en la colección devengado
+db.devengado.insertOne({
+  id: 1,
+  cuenta_devengado_id: 1,
+  concepto: "Devengado1",
+  monto: 75.0,
+  fecha_registro: ISODate("2023-08-14"),
+});
+
+// Colección valuacion_costo que registra la valuación al costo y su cuenta asociada
+db.createCollection("valuacion_costo");
+// Ejemplo de documento en la colección valuacion_costo
+db.valuacion_costo.insertOne({
+  id: 1,
+  cuenta_valuacion_costo_id: 1,
+  costo: 200.0,
+  fecha_registro: ISODate("2023-08-14"),
+});
+
+// Colección patrimonio que registra el patrimonio y su cuenta asociada
+db.createCollection("patrimonio");
+// Ejemplo de documento en la colección patrimonio
+db.patrimonio.insertOne({
+  id: 1,
+  cuenta_patrimonio_id: 1,
+  nombre: "Patrimonio1",
+  valor: 5000.0,
+  fecha_registro: ISODate("2023-08-14"),
+});
+
+// Colección pasivos que registra los pasivos y su cuenta asociada
+db.createCollection("pasivos");
+// Ejemplo de documento en la colección pasivos
+db.pasivos.insertOne({
+  id: 1,
+  cuenta_pasivo_id: 1,
+  nombre: "Pasivo1",
+  valor: 3000.0,
+  fecha_vencimiento: ISODate("2023-08-31"),
+});
+
+// Colección bienes_economicos que almacena los diferentes bienes económicos
+db.createCollection("bienes_economicos");
+// Ejemplo de documento en la colección bienes_economicos
+db.bienes_economicos.insertOne({
+  id: 1,
+  nombre: "Bien1",
+  tipo: "TipoBien1",
+});
+
+// Colección activos que registra los activos y su cuenta asociada
+db.createCollection("activos");
+// Ejemplo de documento en la colección activos
+db.activos.insertOne({
+  id: 1,
+  cuenta_activo_id: 1,
+  bien_id: 1,
+  nombre: "Activo1",
+  valor: 8000.0,
+  fecha_adquisicion: ISODate("2023-07-15"),
+});
+
+// Colección transacciones que registra las transacciones entre cuentas
+db.createCollection("transacciones");
+// Ejemplo de documento en la colección transacciones
+db.transacciones.insertOne({
+  id: 1,
+  cuenta_origen_id: 1,
+  cuenta_destino_id: 2,
+  monto: 200.0,
+  fecha_registro: ISODate("2023-08-14"),
+});
