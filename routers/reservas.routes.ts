@@ -4,6 +4,7 @@ import { plainToClass } from 'class-transformer';
 import { con } from '../db/atlas.js';
 import { validateJWT } from '../middlewares/tokenValidation.js';
 import { Bookings } from '../storage/bookings.js';
+import { ErrorHandler } from "../storage/errorHandler.js";
 import { validate } from 'class-validator';
 
 export const reservas = express.Router();
@@ -51,8 +52,9 @@ reservas.get('/', validateJWT, async (req: Request, res: Response) => {
         .toArray();
       res.send(dataPendiente);
     } catch (error) {
-      res.status(500).send('Ha habido un error...');
-    }
+      console.log(error.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(error)
+      res.send(errorhandl.handerErrorSucess);    }
   }
 });
 
@@ -89,8 +91,9 @@ reservas.get('/:DNI', async (req, res) => {
         .toArray();
       res.send(dataByDNI);
     } catch (err) {
-      res.status(500).send(JSON.stringify(err));
-    }
+      console.log(err.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(err)
+      res.send(errorhandl.handerErrorSucess);    }
   }
 });
 
@@ -124,7 +127,8 @@ reservas.get('/details/:id', async (req, res) => {
         .toArray();
       res.send(dataDetails);
     } catch (err) {
-      res.status(500).send(JSON.stringify(err));
-    }
+      console.log(err.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(err)
+      res.send(errorhandl.handerErrorSucess);    }
   }
 });

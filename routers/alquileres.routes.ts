@@ -4,6 +4,7 @@ import { validate } from "class-validator";
 import { plainToClass } from "class-transformer";
 import { Propieties } from "../storage/rentals.js";
 import { validateJWT } from "../middlewares/tokenValidation.js";
+import { ErrorHandler } from "../storage/errorHandler.js";
 import { con } from "../db/atlas.js";
 
 export const alquieres = express.Router();
@@ -51,7 +52,9 @@ alquieres.get("/", validateJWT, async (req: Request, res: Response) => {
         .toArray();
       res.send(dataActivo);
     } catch (error) {
-      res.status(500).send("Ha habido un error...");
+      console.log(error.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(error)
+      res.send(errorhandl.handerErrorSucess);
     }
   }
 });
@@ -89,7 +92,9 @@ alquieres.get("/:id", async (req, res) => {
         .toArray();
       res.send(dataById);
     } catch (err) {
-      res.status(500).send(JSON.stringify(err));
+      console.log(err.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(err)
+      res.send(errorhandl.handerErrorSucess);
     }
   }
 });
@@ -111,7 +116,9 @@ alquieres.get(
         );
         res.send(result);
       } catch (err) {
-        res.status(500).send(JSON.stringify(err));
+        console.log(err.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(err)
+      res.send(errorhandl.handerErrorSucess);
       }
     }
   }
@@ -149,8 +156,9 @@ alquieres.get(
           .toArray();
         res.send(dataFecha);
       } catch (err) {
-        res.status(500).send(JSON.stringify(err));
-      }
+        console.log(err.errInfo.details.schemaRulesNotSatisfied);
+        let errorhandl=new ErrorHandler(err)
+        res.send(errorhandl.handerErrorSucess);      }
     }
   }
 );

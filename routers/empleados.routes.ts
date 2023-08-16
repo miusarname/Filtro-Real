@@ -5,6 +5,8 @@ import { con } from '../db/atlas.js';
 import { validateJWT } from '../middlewares/tokenValidation.js';
 import { Propieties } from '../storage/rentals.js';
 import { validate } from 'class-validator';
+import { ErrorHandler } from "../storage/errorHandler.js";
+
 
 export const empleados = express.Router();
 
@@ -29,8 +31,9 @@ empleados.get('/', validateJWT, async (req: Request, res: Response) => {
       const data = await empleadoCollection.find({ Cargo: 'Vendedor' }).toArray();
       res.send(data);
     } catch (error) {
-      res.status(500).send('Ha habido un error...');
-    }
+      console.log(error.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(error)
+      res.send(errorhandl.handerErrorSucess);    }
   }
 });
 
@@ -43,8 +46,9 @@ empleados.get('/gerenteoasistente', validateJWT, async (req: Request, res: Respo
       }).toArray();
       res.send(data);
     } catch (error) {
-      res.status(500).send('Ha habido un error...');
-    }
+      console.log(error.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(error)
+      res.send(errorhandl.handerErrorSucess);    }
   }
 });
 
@@ -55,8 +59,9 @@ empleados.get('/:id', validateJWT, async (req: Request, res: Response) => {
       const data = await empleadoCollection.findOne({ ID_Empleado: req.params.id });
       res.send(data);
     } catch (error) {
-      res.status(500).send('Ha habido un error...');
-    }
+      console.log(error.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(error)
+      res.send(errorhandl.handerErrorSucess);    }
   }
 });
 

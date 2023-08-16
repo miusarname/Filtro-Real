@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { MongoClient } from 'mongodb';
 import { con } from '../db/atlas.js';
+import { ErrorHandler } from "../storage/errorHandler.js";
 import { validateJWT } from '../middlewares/tokenValidation.js';
 
 export const sucursales = express.Router();
@@ -37,8 +38,9 @@ sucursales.get('/cantidad', validateJWT, async (req: Request, res: Response) => 
         .toArray();
       res.send(data);
     } catch (error) {
-      res.status(500).send('Ha habido un error...');
-    }
+      console.log(error.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(error)
+      res.send(errorhandl.handerErrorSucess);    }
   }
 });
 
@@ -50,8 +52,9 @@ sucursales.get('/:id', validateJWT, async (req: Request, res: Response) => {
       const data = await sucursalCollection.findOne({ ID_Sucursal: req.params.id });
       res.send(data);
     } catch (error) {
-      res.status(500).send('Ha habido un error...');
-    }
+      console.log(error.errInfo.details.schemaRulesNotSatisfied);
+      let errorhandl=new ErrorHandler(error)
+      res.send(errorhandl.handerErrorSucess);    }
   }
 });
 
