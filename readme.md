@@ -264,3 +264,4 @@ http://localhost:<PORT>/alquieres/1
 ## Licencia
 
 El proyecto está bajo la licencia MIT.
+
